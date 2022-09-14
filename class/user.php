@@ -25,6 +25,33 @@ class User
         return null;
     }
 
+    public static function getUsers(): array | null
+    {
+       global $FANBOX_DIR;
+
+       $profilelists = scandir($FANBOX_DIR . '/profile', SCANDIR_SORT_DESCENDING);
+
+       $users = [];
+
+       $profile_regex = '/^(.+)_profile_\d{14}\.json$/';
+
+       foreach ($profilelists as $profilefn)
+       {
+           if (!preg_match($profile_regex, $profilefn)) continue;
+           $username = preg_replace($profile_regex, '$1', $profilefn);
+           $users[] = $username;
+       }
+       $users = array_unique($users);
+
+       $return_users = [];
+       foreach($users as $username)
+       {
+           $return_users[] = User::getUser($username);
+       }
+
+       return $return_users;
+    }
+
     public function getPosts(): array | null
     {
         global $FANBOX_DIR;

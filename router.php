@@ -8,6 +8,10 @@ if (preg_match('#^/(vendor|file.php)#', $_SERVER["REQUEST_URI"])) {
 
 $klein = new \Klein\Klein();
 
+$klein->respond('GET', '/', function ($req) {
+    require(__DIR__ . '/view/users.php');
+});
+
 $klein->respond('GET', '/@[:user]', function ($req) {
     require(__DIR__ . '/view/user.php');
 });
