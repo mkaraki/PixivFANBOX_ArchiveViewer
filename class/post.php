@@ -48,6 +48,7 @@ class Post
             foreach ($postinfo['body']['fileMap'] as $image) {
                 $post->files[$image['id']] = [
                     'idExt' => $image['id'] . '.' . $image['extension'],
+                    'ext' => $image['extension'],
                     'name' => $image['name'],
                 ];
             }

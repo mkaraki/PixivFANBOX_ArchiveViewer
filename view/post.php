@@ -33,7 +33,9 @@ $post = Post::getPost($req->user, $req->post);
                     <?php elseif ($element['type'] === 'image') : ?>
                         <img src="/file.php?type=post&user=<?= urlencode($post->user->id) ?>&postid=<?= $post->id ?>&ftype=images&idext=<?= $post->images[$element['imageId']]['idExt'] ?>" alt="Image">
                     <?php elseif ($element['type'] === 'file') : ?>
-                        <a href="/file.php?type=post&user=<?= urlencode($post->user->id) ?>&postid=<?= $post->id ?>&ftype=files&idext=<?= $post->files[$element['fileId']]['idExt'] ?>"><?= htmlentities($post->files[$element['fileId']]['name'], ENT_QUOTES, 'UTF-8') ?></a>
+                        <a href="/file.php?type=post&user=<?= urlencode($post->user->id) ?>&postid=<?= $post->id ?>&ftype=files&idext=<?= $post->files[$element['fileId']]['idExt'] ?>">
+                            <?= htmlentities($post->files[$element['fileId']]['name'], ENT_QUOTES, 'UTF-8') ?>.<?= htmlentities($post->files[$element['fileId']]['ext'], ENT_QUOTES, 'UTF-8') ?>
+                        </a>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </div>
