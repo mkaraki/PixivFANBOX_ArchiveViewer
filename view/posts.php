@@ -22,7 +22,7 @@ $user = User::getUser($req->user);
         </div>
     </div>
     <div class="container-fluid">
-        <div class="row row-cols-1 row-cols-md-6 g-4">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 g-4">
             <?php foreach ($user->getPosts() as $post) : ?>
                 <div class="col">
                     <div class="card">
