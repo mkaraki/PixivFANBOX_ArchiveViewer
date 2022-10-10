@@ -11,6 +11,7 @@ class Post
         $post->title = $postInfo['title'];
         $post->excerpt = $postInfo['excerpt'];
         $post->isAdult = $postInfo['hasAdultContent'];
+        $post->isRestricted = $postInfo['isRestricted'];
 
         $post->coverIdExt = array_slice(explode('/', $postInfo['coverImageUrl']), -1)[0];
 
@@ -27,7 +28,14 @@ class Post
         if (count($postinfos) < 1)
             return null;
 
-        $postinfo = json_decode(file_get_contents($basedir . $postinfos[0]), true)['body'];
+        $postinfo = null;
+
+        for ($i = 0; $i < count($postinfos); $i++) {
+            if ($postinfos[$i] == '.' || $postinfos[$i] == '..') continue;
+            $postinfo = json_decode(file_get_contents($basedir . $postinfos[$i]), true)['body'];
+            if ($postinfo['body']['isRestricted'] === false)
+                break;
+        }
 
         $post = Post::getSimplePostFromPostInfo($postinfo);
 

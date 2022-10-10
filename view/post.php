@@ -27,17 +27,21 @@ $post = Post::getPost($req->user, $req->post);
         </div>
         <div class="row">
             <div class="col">
-                <?php foreach ($post->body as $element) : ?>
-                    <?php if ($element['type'] === 'p') : ?>
-                        <p><?= htmlentities($element['text'], ENT_QUOTES, 'UTF-8') ?></p>
-                    <?php elseif ($element['type'] === 'image') : ?>
-                        <img src="/file.php?type=post&user=<?= urlencode($post->user->id) ?>&postid=<?= $post->id ?>&ftype=images&idext=<?= $post->images[$element['imageId']]['idExt'] ?>" alt="Image">
-                    <?php elseif ($element['type'] === 'file') : ?>
-                        <a href="/file.php?type=post&user=<?= urlencode($post->user->id) ?>&postid=<?= $post->id ?>&ftype=files&idext=<?= $post->files[$element['fileId']]['idExt'] ?>">
-                            <?= htmlentities($post->files[$element['fileId']]['name'], ENT_QUOTES, 'UTF-8') ?>.<?= htmlentities($post->files[$element['fileId']]['ext'], ENT_QUOTES, 'UTF-8') ?>
-                        </a>
-                    <?php endif; ?>
-                <?php endforeach; ?>
+                <?php if ($post->isRestricted === true) : ?>
+                    Restricted Content
+                <?php else : ?>
+                    <?php foreach ($post->body as $element) : ?>
+                        <?php if ($element['type'] === 'p') : ?>
+                            <p><?= htmlentities($element['text'], ENT_QUOTES, 'UTF-8') ?></p>
+                        <?php elseif ($element['type'] === 'image') : ?>
+                            <img src="/file.php?type=post&user=<?= urlencode($post->user->id) ?>&postid=<?= $post->id ?>&ftype=images&idext=<?= $post->images[$element['imageId']]['idExt'] ?>" alt="Image">
+                        <?php elseif ($element['type'] === 'file') : ?>
+                            <a href="/file.php?type=post&user=<?= urlencode($post->user->id) ?>&postid=<?= $post->id ?>&ftype=files&idext=<?= $post->files[$element['fileId']]['idExt'] ?>">
+                                <?= htmlentities($post->files[$element['fileId']]['name'], ENT_QUOTES, 'UTF-8') ?>.<?= htmlentities($post->files[$element['fileId']]['ext'], ENT_QUOTES, 'UTF-8') ?>
+                            </a>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
     </div>
