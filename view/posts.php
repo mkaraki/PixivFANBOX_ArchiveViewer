@@ -1,6 +1,11 @@
 <?php
 require_once __DIR__ . '/../class/user.php';
 $user = User::getUser($req->user);
+
+$page = $_GET['page'] ?? 1;
+$page--;
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +28,11 @@ $user = User::getUser($req->user);
     </div>
     <div class="container-fluid">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 g-4">
-            <?php foreach ($user->getPosts() as $post) : ?>
+            <?php
+            $list = $user->getPosts();
+            $range_list = array_slice($list, $page * 30, ($page + 1) * 30);
+            ?>
+            <?php foreach ($range_list as $post) : ?>
                 <div class="col">
                     <div class="card">
                         <img src="/file.php?type=post&user=<?= urlencode($user->id) ?>&postid=<?= $post->id ?>&ftype=cover&idext=<?= $post->coverIdExt ?>" class="card-img-top" alt="Cover">
@@ -36,6 +45,19 @@ $user = User::getUser($req->user);
             <?php endforeach; ?>
         </div>
     </div>
+    <?php
+    $page++;
+    $maxpage = ceil(count($list) / 30);
+    ?>
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li class="page-item<?php if ($page <= 1) echo " disabled"; ?>"><a class="page-link" href="?page=<?= $page - 1; ?>">Previous</a></li>
+            <?php for ($i = 1; $i <= $maxpage; $i++) : ?>
+                <li class="page-item<?php if ($page === $i) echo ' active'; ?>"><a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a></li>
+            <?php endfor; ?>
+            <li class="page-item<?php if ($page >= $maxpage) echo " disabled"; ?>"><a class="page-link" href="?page=<?= $page + 1; ?>">Next</a></li>
+        </ul>
+    </nav>
 
 </body>
 
